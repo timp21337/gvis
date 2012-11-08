@@ -7,7 +7,7 @@
   <script type="text/javascript">
 
   // Load the Visualization API and the ready-made Google table visualization.
-  google.load('visualization', '1', {'packages':['table,piechart,orgchart,barchart']});
+  google.load('visualization', '1', {'packages':['table,piechart,orgchart,barchart,corechart']});
 
   // Set a callback to run when the API is loaded.
   google.setOnLoadCallback(init);
@@ -24,10 +24,11 @@
     query = new google.visualization.Query('advanced?tableId=planets&tq=select planet,mass');
     query.send(handleAdvancedDsResponse);
 
-    query = new google.visualization.Query('GvisServlet/gvis/tableInfo/gvis');
+    // We need to create a view as we cannot do joins
+    // CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tcols` AS select `c`.`id` AS `id`,`tableInfo`.`name` AS `tablename`,`tableInfo`.`displayname` AS `tabledisplayname`,`c`.`displayname` AS `displayname`,`c`.`displayorder` AS `displayorder`,`c`.`description` AS `description`,`c`.`size` AS `size`,`c`.`width` AS `width`,`c`.`height` AS `height` from (`tableInfo` join `columnInfo` `c` on((`c`.`tableinfo` = `tableInfo`.`id`)))
+    query = new google.visualization.Query('GvisServlet/gvis/tcols/gvis');
     // Apply query language.
-    //query.setQuery('select DISPLAYNAME,WIDTH');
-
+    query.setQuery('select DISPLAYNAME, ID, DISPLAYORDER, WIDTH');
     query.send(handleGvisServletResponse);
 
     drawToolbar();
@@ -68,25 +69,7 @@
     var chart = new google.visualization.BarChart(document.getElementById('advanced_div'));
     chart.draw(data, {width: 600, height: 150, is3D: true});
   }
-  // Handle the advanced data source query response
-  function handleGvisServletResponse(response) {
-    if (response.isError()) {
-      alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-      return;
-    }
 
-    var data = response.getDataTable();
-    var chart = new google.visualization.Table(document.getElementById('poem_div'));
-    chart.draw(data, 
-    		{
-    	page: 'Enable', 
-    	pageSize: 10, 
-    	pagingSymbols: {prev: 'prev', next: 'next'}, 
-    	pagingButtonsConfiguration: 'auto',
-    	is3D: false
-    	});
-  }
-  
   // Draw the toolbar.
   function drawToolbar() {
     var components = [
@@ -98,9 +81,61 @@
     google.visualization.drawToolbar(container, components);
   }
 
+  // Handle the advanced data source query response
+  function handleGvisServletResponse(response) {
+    if (response.isError()) {
+      alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+      return;
+    }
+
+    var data = response.getDataTable();
+    var table = new google.visualization.Table(
+    		document.getElementById('poem_table_div'));
+    table.draw(data, 
+    		{
+    	page: 'enable', 
+    	pageSize: 10, 
+    	pagingSymbols: {prev: 'prev', next: 'next'}, 
+    	pagingButtonsConfiguration: 'auto'
+    	});
+    
+    var areaChart = new google.visualization.AreaChart(
+    		document.getElementById('poem_area_chart_div'));
+    areaChart.draw(data, 
+    		{
+    	title: 'Area Chart',
+    	height: 200
+    	});
+    
+    var barChart = new google.visualization.BarChart(
+    		document.getElementById('poem_bar_chart_div'));
+    barChart.draw(data, 
+    		{
+    	title: 'Bar Chart',
+    	height: 200
+    	});
+    
+    var bubbleChart = new google.visualization.BubbleChart(
+    		document.getElementById('poem_bubble_chart_div'));
+    bubbleChart.draw(data, 
+    		{
+    	title: 'Bubble Chart',
+    	height: 600
+    	});
+    
+  }
+  
   </script>
 </head>
 <body>
+  <h1>POEM Data Source</h1>
+  <div id="poem_table_div"></div>
+  <div id="poem_area_chart_div"></div>
+  <div id="poem_bar_chart_div"></div>
+  <div id="poem_bubble_chart_div"></div>
+
+
+<p>&nbsp;</p>
   <h1> Hello! Data Source! </h1>
   A pie chart to show the population of a group of animals.
   The data is taken from the simple data source.
@@ -118,10 +153,7 @@
   The data is taken from the advanced data source.
   <div id="advanced_div"></div>
   
-  <h1>POEM Data Source</h1>
-  Column Table
-  <div id="poem_div"></div>
-
+<p>&nbsp;</p>
 </body>
 </html>
 
