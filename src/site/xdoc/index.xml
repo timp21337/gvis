@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <body>
+
+
+<section name=" Melati ">
+<p>
+  <a href="http://melati.org/">Melati</a> is a tool for building 
+  websites backed by a database, accessing a database over <tt>HTTP</tt> 
+  or from the command line.
+</p>
+</section>
+<section name=" Maven ">
+<p>
+  <a href="http://maven.apache.org/">Maven</a> is a project tool.
+</p>
+</section>
+</body>
+</document>
+
+

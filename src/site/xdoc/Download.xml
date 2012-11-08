@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <body>
+
+
+<section name=" Download Latest Release ">
+
+      <p>
+        The latest snapshot build can be found in our local <a
+	href="http://maven.apache.org/">Maven</a> 
+        repository
+        <a href="http://maven.melati.org/maven2/org.paneris.melati/gvis">here</a>.
+      </p>
+      
+</section>
+<section name=" CVS Access ">
+
+<p>Melati is available via anonymous CVS, which also has a 
+<a href="http://melati.org/cgi-bin/cvsweb.cgi/~checkout~/gvis/">web interface</a>. 
+</p>
+<p>
+With the command-line CVS client, you do:
+</p>
+<pre>
+$ cvs -d :pserver:anonymous@melati.org:/usr/cvsroot login
+(Logging in to anonymous@melati.org)
+CVS password: anonymous
+$ cvs -d :pserver:anonymous@melati.org:/usr/cvsroot checkout gvis
+</pre>
+
+<p>
+ You will need a CVS client to perform the above procedure.  
+ Every Linux distribution comes with command line CVS.
+</p>
+<p>
+If you are using <a href="http://www.eclipse.org/">Eclipse</a> then
+ you can just point to the above repository and checkout as project.
+</p>
+<p>If you want a Windows CVS client, check out <a
+ href="http://www.tortoisecvs.org">www.tortoisecvs.org</a>
+</p>
+</section>
+</body>
+</document>
+
+
