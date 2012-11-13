@@ -7,7 +7,7 @@
   <script type="text/javascript">
 
   // Load the Visualization API and the ready-made Google table visualization.
-  google.load('visualization', '1', {'packages':['table,piechart,orgchart,barchart,corechart']});
+  google.load('visualization', '1', {'packages':['table,piechart,orgchart,barchart,corechart,gauge']});
 
   // Set a callback to run when the API is loaded.
   google.setOnLoadCallback(init);
@@ -28,7 +28,7 @@
     // CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tcols` AS select `c`.`id` AS `id`,`tableInfo`.`name` AS `tablename`,`tableInfo`.`displayname` AS `tabledisplayname`,`c`.`displayname` AS `displayname`,`c`.`displayorder` AS `displayorder`,`c`.`description` AS `description`,`c`.`size` AS `size`,`c`.`width` AS `width`,`c`.`height` AS `height` from (`tableInfo` join `columnInfo` `c` on((`c`.`tableinfo` = `tableInfo`.`id`)))
     query = new google.visualization.Query('GvisServlet/gvis/tcols/gvis');
     // Apply query language.
-    query.setQuery('select DISPLAYNAME, ID, DISPLAYORDER, WIDTH');
+    query.setQuery('select DISPLAYNAME, ID, DISPLAYORDER, WIDTH where id < 20');
     query.send(handleGvisServletResponse);
 
     drawToolbar();
@@ -65,9 +65,8 @@
       return;
     }
 
-    var data = response.getDataTable();
     var chart = new google.visualization.BarChart(document.getElementById('advanced_div'));
-    chart.draw(data, {width: 600, height: 150, is3D: true});
+    chart.draw(response.getDataTable(), {width: 600, height: 150, is3D: true});
   }
 
   // Draw the toolbar.
@@ -89,6 +88,9 @@
     }
 
     var data = response.getDataTable();
+    data.p = {style: 'border: 1px solid green;'};
+    data.s = {sstyle: 'border: 1px solid green;'};
+    alert(data.toJSON());
     var table = new google.visualization.Table(
     		document.getElementById('poem_table_div'));
     table.draw(data, 
@@ -123,6 +125,35 @@
     	height: 600
     	});
     
+    // Need a candle stick example here 
+    
+    var columnChart = new google.visualization.ColumnChart(
+    		document.getElementById('poem_column_chart_div'));
+    columnChart.draw(data, 
+    		{
+    	title: 'Column Chart',
+    	height: 200
+    	});
+
+    var comboChart = new google.visualization.ComboChart(
+    		document.getElementById('poem_combo_chart_div'));
+    comboChart.draw(data, 
+    		{
+    	title: 'Combo Chart',
+    	height: 200
+    	});
+    
+    var gaugeChart = new google.visualization.Gauge(
+    		document.getElementById('poem_gauge_chart_div'));
+    	
+    gaugeChart.draw(data, 
+  		{
+    	  height: 400, 
+          title: 'Gauge Chart',
+          redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90,
+          minorTicks: 5
+    	});
   }
   
   </script>
@@ -133,6 +164,9 @@
   <div id="poem_area_chart_div"></div>
   <div id="poem_bar_chart_div"></div>
   <div id="poem_bubble_chart_div"></div>
+  <div id="poem_column_chart_div"></div>
+  <div id="poem_combo_chart_div"></div>
+  <div id="poem_gauge_chart_div"></div>
 
 
 <p>&nbsp;</p>
